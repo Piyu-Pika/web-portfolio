@@ -8,7 +8,7 @@
     {
       "projectItem": "MY AI",
       "image": "MY AI.png",
-      "content": "An ai assistense",
+      "content": "This is an assistant which use the Google Gemini API for the back end and provide you the latest information from the Internet.Text from future updates I am planning to intigrated a  Voice Assistant to this",
       "link": "https://github.com/Piyu-Pika/my_ai"
     },
     {

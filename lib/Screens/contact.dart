@@ -28,6 +28,11 @@ class CallsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 200,
+              width: 200,
+              child: Image.asset("assets/images/profile.png"),
+            ),
             ListTile(
               leading: const Icon(Icons.phone),
               title: Text(contactNumber),

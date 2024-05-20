@@ -127,7 +127,7 @@ class ChatItemWidget extends StatelessWidget {
           if (ProjectItem.count != null)
             CircleAvatar(
               radius: 10,
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.deepPurpleAccent,
               child: Text(
                 ProjectItem.count.toString(),
                 style: const TextStyle(
