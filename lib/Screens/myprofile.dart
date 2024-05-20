@@ -34,7 +34,10 @@ class CommunitiesScreen extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              Text('1. Certificat of completion form')
+              Text('1. Certificate of completion from GUVI for Ai 2.0'),
+              Text('2. Certificate of completion from GUVI for Python '),
+              Text('3. Certificate of completion from Let\'sUpgarde for C++'),
+              Text('4. Certificate of completion from Career Ninja For Flutter')
             ],
           ),
         ));
