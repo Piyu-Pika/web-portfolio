@@ -36,19 +36,19 @@ class CommunitiesScreen extends StatelessWidget {
               ),
               Text(
                 '1. Certificate of completion from GUVI for Ai 2.0',
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.left,
               ),
               Text(
                 '2. Certificate of completion from GUVI for Python ',
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.left,
               ),
               Text(
                 '3. Certificate of completion from Let\'sUpgarde for C++',
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.left,
               ),
               Text(
                 '4. Certificate of completion from Career Ninja For Flutter',
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.left,
               )
             ],
           ),
