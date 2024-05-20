@@ -38,7 +38,7 @@
     {
       "projectItem": "Codsoft To-do List",
       "image": "codsoft2.jpg",
-      "content": "During my internship at CodSoft, I worked on a to-do list application. It was a cross-platform app built with React Native and Firebase.",
+      "content": "During my internship at CodSoft, I worked on a to-do list application. It was a cross-platform app built with Flutter",
       "link": "https://github.com/Piyu-Pika/codesoft-to-do-list"
     }
   ] 
