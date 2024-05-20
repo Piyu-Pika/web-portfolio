@@ -65,11 +65,11 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            label: 'Communities',
+            label: 'My Profile',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.call),
-            label: 'Calls',
+            label: 'Contact Me',
           ),
         ],
       ),
