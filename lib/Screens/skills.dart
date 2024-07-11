@@ -6,11 +6,8 @@ class RotatingSkillsWheel extends StatefulWidget {
   _RotatingSkillsWheelState createState() => _RotatingSkillsWheelState();
 }
 
-class _RotatingSkillsWheelState extends State<RotatingSkillsWheel>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  double _startRotation = 0.0;
-  double _endRotation = 0.0;
+class _RotatingSkillsWheelState extends State<RotatingSkillsWheel> {
+  double _rotation = 0.0;
 
   final List<Map<String, String>> skillsData = [
     {"asset": "assets/images/as.png", "name": "Android Studio"},
@@ -24,67 +21,42 @@ class _RotatingSkillsWheelState extends State<RotatingSkillsWheel>
     {"asset": "assets/images/gh.png", "name": "GitHub"},
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _rotateWheel(double rotation) {
+  void _rotateWheel(DragUpdateDetails details) {
     setState(() {
-      _startRotation = _endRotation;
-      _endRotation += rotation;
+      _rotation += details.delta.dx * 0.01;
     });
-    _controller.forward(from: 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text('My Skills Wheel',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         centerTitle: true,
+        backgroundColor: Colors.black,
+        elevation: 0,
       ),
-      body: Container(
-        decoration: BoxDecoration(),
-        child: Center(
-          child: GestureDetector(
-            onPanUpdate: (details) {
-              _rotateWheel(details.delta.dx * 0.01);
-            },
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: _startRotation +
-                      (_endRotation - _startRotation) * _controller.value,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: List.generate(skillsData.length, (index) {
-                      final angle = 2 * pi * index / skillsData.length;
-                      final radius = 140.0;
-                      return Transform.translate(
-                        offset:
-                            Offset(radius * cos(angle), radius * sin(angle)),
-                        child: SkillCard(
-                          imageAsset: skillsData[index]["asset"]!,
-                          skillName: skillsData[index]["name"]!,
-                        ),
-                      );
-                    }),
+      body: GestureDetector(
+        onPanUpdate: _rotateWheel,
+        child: Container(
+          color: Colors.black,
+          child: Center(
+            child: Stack(
+              alignment: Alignment.center,
+              children: List.generate(skillsData.length, (index) {
+                final angle = 2 * pi * index / skillsData.length + _rotation;
+                final radius = 140.0;
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..translate(radius * cos(angle), radius * sin(angle)),
+                  child: SkillCard(
+                    imageAsset: skillsData[index]["asset"]!,
+                    skillName: skillsData[index]["name"]!,
                   ),
                 );
-              },
+              }),
             ),
           ),
         ),
@@ -109,11 +81,11 @@ class SkillCard extends StatelessWidget {
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white10,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.white.withOpacity(0.1),
             blurRadius: 5,
             spreadRadius: 2,
           ),
@@ -127,9 +99,7 @@ class SkillCard extends StatelessWidget {
           Text(
             skillName,
             style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 8, fontWeight: FontWeight.bold, color: Colors.white),
             textAlign: TextAlign.center,
           ),
         ],
