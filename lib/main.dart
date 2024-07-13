@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _screens = [
     ProjectUI(),
     RotatingSkillsWheel(),
-    CommunitiesScreen(),
+    ProfileScreen(),
     CallsScreen(),
   ];
 

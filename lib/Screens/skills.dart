@@ -6,8 +6,10 @@ class RotatingSkillsWheel extends StatefulWidget {
   _RotatingSkillsWheelState createState() => _RotatingSkillsWheelState();
 }
 
-class _RotatingSkillsWheelState extends State<RotatingSkillsWheel> {
-  double _rotation = 0.0;
+class _RotatingSkillsWheelState extends State<RotatingSkillsWheel>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _rotationAnimation;
 
   final List<Map<String, String>> skillsData = [
     {"asset": "assets/images/as.png", "name": "Android Studio"},
@@ -21,10 +23,22 @@ class _RotatingSkillsWheelState extends State<RotatingSkillsWheel> {
     {"asset": "assets/images/gh.png", "name": "GitHub"},
   ];
 
-  void _rotateWheel(DragUpdateDetails details) {
-    setState(() {
-      _rotation += details.delta.dx * 0.01;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 20), // Adjust the duration as needed
+      vsync: this,
+    )..repeat();
+
+    _rotationAnimation =
+        Tween<double>(begin: 0, end: 2 * pi).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,26 +52,29 @@ class _RotatingSkillsWheelState extends State<RotatingSkillsWheel> {
         backgroundColor: Colors.black,
         elevation: 0,
       ),
-      body: GestureDetector(
-        onPanUpdate: _rotateWheel,
-        child: Container(
-          color: Colors.black,
-          child: Center(
-            child: Stack(
-              alignment: Alignment.center,
-              children: List.generate(skillsData.length, (index) {
-                final angle = 2 * pi * index / skillsData.length + _rotation;
-                final radius = 140.0;
-                return Transform(
-                  transform: Matrix4.identity()
-                    ..translate(radius * cos(angle), radius * sin(angle)),
-                  child: SkillCard(
-                    imageAsset: skillsData[index]["asset"]!,
-                    skillName: skillsData[index]["name"]!,
-                  ),
-                );
-              }),
-            ),
+      body: Container(
+        color: Colors.black,
+        child: Center(
+          child: AnimatedBuilder(
+            animation: _rotationAnimation,
+            builder: (context, child) {
+              return Stack(
+                alignment: Alignment.center,
+                children: List.generate(skillsData.length, (index) {
+                  final angle = 2 * pi * index / skillsData.length +
+                      _rotationAnimation.value;
+                  final radius = 140.0;
+                  return Transform(
+                    transform: Matrix4.identity()
+                      ..translate(radius * cos(angle), radius * sin(angle)),
+                    child: SkillCard(
+                      imageAsset: skillsData[index]["asset"]!,
+                      skillName: skillsData[index]["name"]!,
+                    ),
+                  );
+                }),
+              );
+            },
           ),
         ),
       ),
