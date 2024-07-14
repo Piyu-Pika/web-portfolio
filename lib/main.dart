@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:portfolio/ai_bot.dart';
+import 'package:portfolio/code.dart';
 import 'Screens/myprofile.dart';
 import 'Screens/contact.dart';
 import 'Screens/potfolio.dart';
 import 'Screens/skills.dart';
 
 void main() {
+  Gemini.init(apiKey: aikey);
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isDarkMode = true;
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const HomePage(),
+      theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: HomePage(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final bool isDarkMode;
+  final VoidCallback toggleTheme;
+
+  const HomePage(
+      {super.key, required this.isDarkMode, required this.toggleTheme});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -31,23 +52,42 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    ProjectUI(),
-    RotatingSkillsWheel(),
-    ProfileScreen(),
-    CallsScreen(),
-  ];
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      ProjectUI(),
+      RotatingSkillsWheel(),
+      ProfileScreen(),
+      CallsScreen(),
+    ];
+  }
+
+  void _openaiassistent() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const MyAiScreen(),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Portfolio'),
+        actions: [
+          IconButton(
+            icon: Icon(widget.isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            onPressed: widget.toggleTheme,
+          ),
+        ],
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        selectedItemColor:
-            Colors.deepPurpleAccent, // Change the selected item color here
-        unselectedItemColor:
-            Colors.grey, // Change the unselected item color here
+        backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
+        selectedItemColor: Colors.deepPurpleAccent,
+        unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -73,6 +113,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: _openaiassistent, child: Icon(Icons.adb)),
     );
   }
 }

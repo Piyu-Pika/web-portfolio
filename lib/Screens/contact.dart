@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,45 +23,94 @@ class CallsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contact'),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text('Contact', style: TextStyle(color: Colors.white)),
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.purple, Colors.blue],
+                  ),
+                ),
+                child: Center(
+                  child: CircleAvatar(
+                    radius: max(0, 100),
+                    backgroundImage: AssetImage("assets/images/profile.png"),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                SizedBox(height: 20),
+                _buildContactCard(
+                  icon: Icons.phone,
+                  title: 'Phone',
+                  subtitle: contactNumber,
+                  onTap: () => _launchUrl('tel://$contactNumber'),
+                ),
+                _buildContactCard(
+                  icon: Icons.email,
+                  title: 'Email',
+                  subtitle: email,
+                  onTap: () => _launchUrl('mailto:$email'),
+                ),
+                _buildContactCard(
+                  icon: Icons.language,
+                  title: 'LinkedIn',
+                  subtitle: 'View Profile',
+                  onTap: () => _launchUrl(linkedInUrl),
+                ),
+                _buildContactCard(
+                  icon: Icons.code,
+                  title: 'GitHub',
+                  subtitle: 'Check Projects',
+                  onTap: () => _launchUrl(githubUrl),
+                ),
+                _buildContactCard(
+                  icon: Icons.chat,
+                  title: 'WhatsApp',
+                  subtitle: whatsappNumber,
+                  onTap: () => _launchUrl('https://wa.me/$whatsappNumber'),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 200,
-              width: 200,
-              child: Image.asset("assets/images/profile.png"),
-            ),
-            ListTile(
-              leading: const Icon(Icons.phone),
-              title: Text(contactNumber),
-              onTap: () => _launchUrl('tel://$contactNumber'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.email),
-              title: Text(email),
-              onTap: () => _launchUrl('mailto:$email'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.language),
-              title: const Text('LinkedIn'),
-              onTap: () => _launchUrl(linkedInUrl),
-            ),
-            ListTile(
-              leading: const Icon(Icons.code),
-              title: const Text('GitHub'),
-              onTap: () => _launchUrl(githubUrl),
-            ),
-            ListTile(
-              leading: const Icon(Icons.chat),
-              title: const Text('WhatsApp'),
-              onTap: () => _launchUrl('https://wa.me/$whatsappNumber'),
-            ),
-          ],
+    );
+  }
+
+  Widget _buildContactCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
+      color: Colors.grey[900],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.shade100,
+          child: Icon(icon, color: Colors.blue),
         ),
+        title: Text(title,
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        subtitle: Text(subtitle, style: TextStyle(color: Colors.white70)),
+        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+        onTap: onTap,
       ),
     );
   }
