@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:portfolio/ai_bot.dart';
-import 'package:portfolio/code.dart';
 import 'Screens/myprofile.dart';
 import 'Screens/contact.dart';
 import 'Screens/potfolio.dart';
