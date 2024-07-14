@@ -6,6 +6,7 @@ import 'Screens/myprofile.dart';
 import 'Screens/contact.dart';
 import 'Screens/potfolio.dart';
 import 'Screens/skills.dart';
+import 'dart:js' as js;
 
 void main() {
   Gemini.init(apiKey: aikey);
