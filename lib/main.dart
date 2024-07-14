@@ -9,7 +9,8 @@ import 'Screens/skills.dart';
 import 'dart:js' as js;
 
 void main() {
-  Gemini.init(apiKey: aikey);
+  String apiKey = js.context['ENV']['GEMINI_API_KEY'];
+  Gemini.init(apiKey: apiKey);
   runApp(const MyApp());
 }
 
