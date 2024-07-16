@@ -44,16 +44,15 @@ class _RotatingSkillsWheelState extends State<RotatingSkillsWheel>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text('My Skills Wheel',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
         centerTitle: true,
-        backgroundColor: Colors.black,
         elevation: 0,
       ),
       body: Container(
-        color: Colors.black,
         child: Center(
           child: AnimatedBuilder(
             animation: _rotationAnimation,
@@ -116,7 +115,9 @@ class SkillCard extends StatelessWidget {
           Text(
             skillName,
             style: TextStyle(
-                fontSize: 8, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 8,
+              fontWeight: FontWeight.bold,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

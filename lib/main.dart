@@ -5,10 +5,10 @@ import 'Screens/myprofile.dart';
 import 'Screens/contact.dart';
 import 'Screens/potfolio.dart';
 import 'Screens/skills.dart';
-import 'dart:js' as js;
 
 void main() {
-  String apiKey = js.context['ENV']['GEMINI_API_KEY'];
+  String apiKey = const String.fromEnvironment('GEMINI_API_KEY');
+  WidgetsFlutterBinding.ensureInitialized();
   Gemini.init(apiKey: apiKey);
   runApp(const MyApp());
 }

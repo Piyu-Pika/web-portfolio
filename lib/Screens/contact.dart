@@ -99,17 +99,18 @@ class CallsScreen extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
-      color: Colors.grey[900],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.blue.shade100,
           child: Icon(icon, color: Colors.blue),
         ),
-        title: Text(title,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        subtitle: Text(subtitle, style: TextStyle(color: Colors.white70)),
-        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(subtitle, style: TextStyle()),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+        ),
         onTap: onTap,
       ),
     );

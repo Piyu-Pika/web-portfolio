@@ -25,6 +25,7 @@ class _MyAiScreenState extends State<MyAiScreen> {
     5. Cancer Predictor (YBI Foundation, May 2024)
     6. Purchase Prediction and MicroUniversity (YBI Foundation, March 2024)
     7. Codsoft To-do List (Codsoft, March 2024)
+    8. video calling app using agora
     Education:
     - B.Tech in Computer Science, Chaudhary Charan Singh University (2022-2026)
     Certifications:
@@ -32,6 +33,8 @@ class _MyAiScreenState extends State<MyAiScreen> {
     - Python (GUVI)
     - AI for India 2.0 (GUVI)
     - Introduction to Flutter (CareerNinja)
+
+    the github links are provided in porfolio section 
   ''';
 
   Future<void> _sendMessage() async {

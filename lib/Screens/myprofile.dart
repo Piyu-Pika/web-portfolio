@@ -102,7 +102,9 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildText(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+      style: TextStyle(
+        fontSize: 16,
+      ),
       textAlign: TextAlign.justify,
     );
   }
@@ -115,9 +117,8 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Text(degree,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(school, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-          Text(duration,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+          Text(school, style: TextStyle(fontSize: 14)),
+          Text(duration, style: TextStyle(fontSize: 14)),
         ],
       ),
     );

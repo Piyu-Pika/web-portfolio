@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectUI extends StatefulWidget {
@@ -8,26 +8,14 @@ class ProjectUI extends StatefulWidget {
 }
 
 class _ProjectUIState extends State<ProjectUI> {
-  final List<ChatItem> chatItems = [
-    ChatItem(name: 'GSIP', message: 'Project1', date: 'March 2024'),
-    ChatItem(name: 'MY AI', message: 'Personal Project', date: 'March 2024'),
-    ChatItem(
-        name: 'Anime Quote App', file: 'Personal Project', date: 'March 2024'),
-    ChatItem(
-        name: 'CodSoft Quote Modle',
-        message: 'Codsoft',
-        count: 2,
-        date: 'may 2024'),
-    ChatItem(
-        name: 'Cancer Priductor', message: 'YBI Foundation', date: 'May 2024'),
-    ChatItem(
-        name: 'Purchase Priduction and MicroNumersity',
-        message: 'YBI Foundation',
-        date: 'March 2024'),
-    ChatItem(
-        name: 'Codsoft To-do List', message: 'Codsoft', date: 'March 2024'),
-    ChatItem(name: 'Video Call', message: 'project', date: 'july 2024')
-  ];
+  late Stream<QuerySnapshot> _projectsStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _projectsStream =
+        FirebaseFirestore.instance.collection('projects').snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +29,7 @@ class _ProjectUIState extends State<ProjectUI> {
                 prefixIcon: const Icon(Icons.search),
                 hintText: 'Search...',
                 filled: true,
+                fillColor: Colors.grey[800],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   borderSide: BorderSide.none,
@@ -49,20 +38,37 @@ class _ProjectUIState extends State<ProjectUI> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: chatItems.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProjectDetailScreen(projectItem: chatItems[index]),
-                      ),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _projectsStream,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                return ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProjectDetailScreen(projectId: document.id),
+                          ),
+                        );
+                      },
+                      child: ChatItemWidget(
+                          ProjectItem: ChatItem.fromMap(data, document.id)),
                     );
-                  },
-                  child: ChatItemWidget(ProjectItem: chatItems[index]),
+                  }).toList(),
                 );
               },
             ),
@@ -74,6 +80,7 @@ class _ProjectUIState extends State<ProjectUI> {
 }
 
 class ChatItem {
+  final String id;
   final String name;
   final String? message;
   final String? file;
@@ -81,12 +88,24 @@ class ChatItem {
   final String? date;
 
   ChatItem({
+    required this.id,
     required this.name,
     this.message,
     this.file,
     this.count,
     this.date,
   });
+
+  factory ChatItem.fromMap(Map<String, dynamic> map, String id) {
+    return ChatItem(
+      id: id,
+      name: map['name'] ?? '',
+      message: map['message'],
+      file: map['file'],
+      count: map['count'],
+      date: map['date'],
+    );
+  }
 }
 
 class ChatItemWidget extends StatelessWidget {
@@ -135,47 +154,17 @@ class ChatItemWidget extends StatelessWidget {
   }
 }
 
-class ProjectDetailScreen extends StatefulWidget {
-  final ChatItem projectItem;
+class ProjectDetailScreen extends StatelessWidget {
+  final String projectId;
 
-  const ProjectDetailScreen({super.key, required this.projectItem});
-
-  @override
-  _ProjectDetailScreenState createState() => _ProjectDetailScreenState();
-}
-
-class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
-  Future<Map<String, dynamic>> loadProjectData() async {
-    String jsonString = await DefaultAssetBundle.of(context)
-        .loadString('assets/data/projects.json');
-    List<dynamic> projects = jsonDecode(jsonString);
-    return projects.firstWhere(
-        (project) => project['projectItem'] == widget.projectItem.name);
-  }
+  const ProjectDetailScreen({super.key, required this.projectId});
 
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      // Handle the case when the URL can't be launched
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Could not launch URL'),
-            content: Text('Could not launch $url'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      print('Could not launch $url');
     }
   }
 
@@ -183,33 +172,42 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.projectItem.name),
+        title: Text('Project Details'),
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: loadProjectData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final projectData = snapshot.data!;
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('projects')
+            .doc(projectId)
+            .get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            return Text("Document does not exist");
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset('assets/images/${projectData['image']}'),
+                  Image.network(data['imageUrl'] ?? ''),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      projectData['content'],
+                      data['content'] ?? '',
                       style: const TextStyle(fontSize: 16.0),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: ElevatedButton(
-                      onPressed: () => _launchUrl(projectData['link']),
+                      onPressed: () => _launchUrl(data['link'] ?? ''),
                       child: const Text('Visit Link'),
                     ),
                   ),
@@ -217,6 +215,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               ),
             );
           }
+
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
