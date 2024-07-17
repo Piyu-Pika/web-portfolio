@@ -1,16 +1,71 @@
-# portfolio
+# My Portfolio App
 
-A new Flutter project.
+A comprehensive Flutter-based portfolio application showcasing my skills, projects, and professional information.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- **Profile Screen**: Displays personal information, education, skills, and certifications.
+- **Portfolio**: Showcases projects with detailed information and links.
+- **Skills Wheel**: An interactive, rotating wheel displaying technical skills.
+- **AI Assistant**: A Gemini-powered AI bot that can answer questions about the portfolio.
+- **Contact Information**: Easy access to various contact methods and social profiles.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Technologies Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Dart
+- Firebase
+- Flutter Gemini (for AI integration)
+- URL Launcher
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📚 Sections
+
+1. **My Profile**
+   - Personal information
+   - Education details
+   - Skills overview
+   - Certifications
+
+2. **Portfolio**
+   - List of projects
+   - Detailed project information
+   - Project links
+
+3. **Skills**
+   - Interactive rotating skills wheel
+   - Visual representation of technical skills
+
+4. **AI Assistant**
+   - Chat interface for portfolio inquiries
+   - Powered by Gemini AI
+
+5. **Contact**
+   - Phone, Email, LinkedIn, GitHub, and WhatsApp links
+   - Easy one-tap contact options
+
+## 🚀 Getting Started
+
+1. Clone the repository:
+2. Navigate to the project directory:
+3. Install dependencies:
+4. Run the app:
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Piyu_Pika/web-portfolio/issues).
+
+## 📄 License
+
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+
+## 👤 Author
+
+**Piyush Bhardwaj**
+
+- GitHub: [@Piyu-Pika](https://github.com/Piyu-Pika)
+- LinkedIn: [Piyush Bhardwaj](https://www.linkedin.com/in/piyush-bhardwaj-flutter)
+
+## 🙏 Acknowledgments
+
+- Thanks to all contributors and supporters of this project!
+- Special thanks to the Flutter community for their excellent documentation and resources.
